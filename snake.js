@@ -52,31 +52,35 @@ function drawFood(foodX, foodY) {
   ctx.strokeRect(foodX, foodY, 10, 10);
 }
 
-// Define the function to draw the food
 
+// Define the function to move the snake
 // Define the function to move the snake
 function moveSnake() {
   // Get the current position of the snake's head
-  const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+  const head = {x: snake[0].x + dx, y: snake[0].y + dy};
 
   // Check if the snake is out of bounds
-  if (
-    head.x < 0 ||
-    head.x >= canvas.width ||
-    head.y < 0 ||
-    head.y >= canvas.height
-  ) {
+  if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
     // Stop the game loop
     return;
+  }
+
+  // Check if the snake has collided with itself
+  for (let i = 1; i < snake.length; i++) {
+    if (head.x === snake[i].x && head.y === snake[i].y) {
+      // Stop the game loop
+      return;
+    }
   }
 
   // Check if the snake has eaten the food
   if (head.x === foodX && head.y === foodY) {
     // Increase the score
     score++;
-
+    foodX = Math.floor(Math.random() * (canvas.width / 10)) * 10;
+    foodY = Math.floor(Math.random() * (canvas.height / 10)) * 10;
     // Generate new food
-    drawFood();
+    drawFood(foodX, foodY);
   } else {
     // Remove the last element of the snake
     snake.pop();
